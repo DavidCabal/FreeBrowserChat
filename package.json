@@ -6,7 +6,10 @@
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc -w",
-    "copy-files": "copyfiles -u 1 ./**/*.html dist",
+    "copy-files": "npm run delete-dist-html && copyfiles -u 1 ./**/*.html dist",
+    "copy-files-windows": "npm run delete-dist-html-windows && copyfiles -u 1 ./**/*.html dist",
+    "delete-dist-html": "rm -rf ./dist/chat/*.html",
+    "delete-dist-html-windows": "del dist\\chat\\*.html",
     "start": "nodemon dist/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

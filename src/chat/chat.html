@@ -14,7 +14,7 @@
       font: 13px Helvetica, Arial;
     }
 
-    form {
+    .container {
       background: #000;
       padding: 3px;
       position: fixed;
@@ -22,14 +22,14 @@
       width: 100%;
     }
 
-    form input {
+    input {
       border: 0;
       padding: 10px;
       width: 90%;
       margin-right: .5%;
     }
 
-    form button {
+    button {
       width: 9%;
       background: greenyellow;
       border: none;
@@ -49,18 +49,30 @@
     #messages li:nth-child(odd) {
       background: #eee;
     }
+
+    .mine {
+      color: darkblue;
+      font-weight: bold;
+    }
+
+    .theirs {
+      color: darkgreen;
+      font-weight: bold;
+    }
   </style>
 </head>
 
 <body>
   <ul id="messages"></ul>
-  <form action="">
-    <input id="m" autocomplete="off" /><button>Send</button>
-  </form>
+  <div class="container">
+    <input id="m" autocomplete="off" onkeypress="detectKeyPress(event, socket)" /><button id="sendButton" onclick="sendMessage(socket)">Send</button>
+  </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/static/chat.js"></script>
   <script>
     const socket = io();
+    receiveMessages(socket);
   </script>
 </body>
 
