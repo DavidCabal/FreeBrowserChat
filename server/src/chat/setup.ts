@@ -1,11 +1,15 @@
 const nodeFetch = require('node-fetch');
 
 export const initializeChat = (io): void => {
-  io.on('connection', function (socket) {
-    io.emit('message', 'A new user has connected!');
+  io.on('connection', socket => {
+    // do something fun when a user connects
 
-    socket.on('disconnect', function () {
+    socket.on('disconnect', () => {
       // do something really sad when a user disconnects
+    });
+
+    socket.on('userConnected', user => {
+      io.emit('userConnected', user);
     });
 
     socket.on('message', msg => {

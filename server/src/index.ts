@@ -3,7 +3,7 @@ import express from 'express';
 const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
-const port = 3000;
+const port = 4000;
 
 app.use('/static', express.static(__dirname + '/chat'));
 
