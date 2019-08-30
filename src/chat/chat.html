@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Socket.IO chat</title>
+  <title>Real Time Chat POC</title>
   <style>
     * {
       margin: 0;
@@ -40,6 +40,8 @@
       list-style-type: none;
       margin: 0;
       padding: 0;
+      height: 90vh;
+      overflow: auto;
     }
 
     #messages li {
@@ -59,13 +61,24 @@
       color: darkgreen;
       font-weight: bold;
     }
+
+    .gif {
+      width: 40vw;
+      height: 40vh;
+      position: absolute;
+      left: 30vw;
+      top: 30vh;
+      display: none;
+    }
   </style>
 </head>
 
 <body>
   <ul id="messages"></ul>
+  <iframe class="gif" id="gif"></iframe>
   <div class="container">
-    <input id="m" autocomplete="off" onkeypress="detectKeyPress(event, socket)" /><button id="sendButton" onclick="sendMessage(socket)">Send</button>
+    <input id="m" autocomplete="off" onkeypress="detectKeyPress(event, socket)" /><button id="sendButton"
+      onclick="sendMessage(socket)">Send</button>
   </div>
 
   <script src="/socket.io/socket.io.js"></script>
