@@ -1,5 +1,5 @@
-# node-real-time-examples
-The project name is a little confusing. What this actually contains is Node real time examples.
+# Free Browser Chat
+The project name is a little confusing. What this actually contains is a free chat app that works in the browser.
 
 # Quick Start Instructions
 * clone repo
