@@ -11,26 +11,32 @@ interface state {
 }
 
 interface messagesInterface {
-  user: string;
-  message: string;
+  name: string;
+  text: string;
 }
-
-const CreateMessages = (messages: messagesInterface[]) => {
-  return messages.map((msg, index) => {
-    return <li key={index}><span style={{ fontWeight: "bold" }}>{msg.user}:</span> {msg.message}</li>
-  });
-};
 
 const List = styled.ul`
   list-style-type: none;
   margin: 0;
-  padding: 0;
   height: 95vh;
   width: 85vw;
   border: 1px solid grey;
   overflow: auto;
-  padding: 5px;
+  padding: 5px 15px 5px 5px;
+  @media (max-width: 720px) {
+    width: 100vw;
+  }
 `;
+
+const ListElement = styled.li`
+  padding-top: 5px;
+`;
+
+const CreateMessages = (messages: messagesInterface[]) => {
+  return messages.map((msg, index) => {
+    return <ListElement key={index}><span style={{ fontWeight: "bold" }}>{msg.name}:</span> {msg.text}</ListElement>
+  });
+};
 
 export default class Messages extends Component<props, state> {
   constructor(props) {
@@ -41,9 +47,16 @@ export default class Messages extends Component<props, state> {
     };
   }
 
+  endOfList;
+
+  componentDidUpdate() {
+    const chatWindow = document.getElementById('chatList');
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+  }
+
   render() {
     return (
-      <List>
+      <List id={"chatList"}>
         {CreateMessages(this.state.messages)}
       </List>
     );

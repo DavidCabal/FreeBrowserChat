@@ -7,13 +7,27 @@ import styled from 'styled-components';
 import Join from './components/Join/Join';
 import Messages from './components/Messages/Messages';
 import Users from './components/Users/Users';
+import ChatInput from './components/ChatInput/ChatInput';
 import './animate.css';
 
 interface props { }
 
-interface state {
+interface User {
+  id: string;
   name: string;
-  users: string[];
+}
+
+interface Message {
+  name: string;
+  text: string;
+}
+
+interface state {
+  connected: boolean;
+  name: string;
+  users: User[];
+  id: string;
+  messages: Message[];
 }
 
 const Parent = styled.div`
@@ -28,20 +42,17 @@ const CenteredContainer = styled.div`
   align-items: center;
 `;
 
-const testMessages = [
-  { user: 'abc', message: 'hi' },
-  { user: 'def', message: 'yo' },
-  { user: 'ghi', message: 'sup' }
-];
-
 const socket = io('http://localhost:4000');
 
 export default class App extends React.Component<props, state> {
   constructor(props) {
     super(props);
     this.state = {
+      connected: false,
       name: '',
-      users: []
+      users: [],
+      id: '',
+      messages: []
     };
 
     this.listenForEvents();
@@ -53,25 +64,42 @@ export default class App extends React.Component<props, state> {
       users.push(user);
       this.setState({ users });
     });
+    socket.on('userDisconnected', id => {
+      const currentUsers = this.state.users;
+      const remainingUsers = currentUsers.filter(user => user.id !== id);
+      this.setState({ users: remainingUsers });
+    });
+    socket.on('currentUsers', users => this.setState({ users }));
+    socket.on('message', msg => {
+      const currentMessages = this.state.messages;
+      currentMessages.push({ name: msg.name, text: msg.text });
+      this.setState({ messages: currentMessages });
+    });
   };
 
   setName = (name: string) => {
-    this.setState({ name });
-    socket.emit('userConnected', name);
+    this.setState({ connected: true, name });
+    socket.emit('initialConnection', '');
+    socket.emit('userConnected', { id: socket.id, name });
+  };
+
+  submitMessage = msg => {
+    socket.emit('message', { name: this.state.name, text: msg });
   };
 
   render() {
     return (
       <Parent>
-        {this.state.name === '' &&
+        {!this.state.connected &&
           <CenteredContainer className={"animated fadeIn"}>
             <Join setName={this.setName} />
           </CenteredContainer>
         }
-        {this.state.name !== '' &&
+        {this.state.connected &&
           <div className={"animated fadeIn"}>
-            <Messages messages={testMessages} />
-            <Users users={this.state.users} />
+            <Messages messages={this.state.messages} />
+            <Users users={this.state.users} getUsers={this.state.users} />
+            <ChatInput submitMessage={this.submitMessage} />
           </div>
         }
       </Parent>

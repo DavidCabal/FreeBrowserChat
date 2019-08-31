@@ -3,11 +3,17 @@ import styled from 'styled-components';
 import '../../animate.css';
 
 interface props {
-  users: string[]
+  users: User[],
+  getUsers: any
 }
 
 interface state {
-  users: string[]
+  users: User[]
+}
+
+interface User {
+  id: string;
+  name: string;
 }
 
 const Parent = styled.div`
@@ -18,6 +24,9 @@ const Parent = styled.div`
   padding: 5px;
   height: 50vh;
   width: 15vw;
+  @media (max-width: 720px) {
+    display:none;
+  }
 `;
 
 const List = styled.ul`
@@ -27,9 +36,14 @@ const List = styled.ul`
   overflow: auto;
 `;
 
-const CreateUsers = (users: string[]) => {
+const ListElement = styled.li`
+  padding: 5px 10px 5px 10px;
+  overflow-wrap: break-word;
+`;
+
+const CreateUsers = (users: User[]) => {
   return users.map((user, index) => {
-    return <li className={"animated fadeIn"} key={index}>{user}</li>
+    return <ListElement className={"animated fadeIn"} key={index}>{user.name}</ListElement>
   });
 };
 
@@ -49,7 +63,7 @@ export default class Users extends Component<props, state> {
           <h4 style={{ textDecoration: "underline" }}>Current Users</h4>
         </div>
         <List>
-          {CreateUsers(this.state.users)}
+          {CreateUsers(this.props.getUsers)}
         </List>
       </Parent>
     );

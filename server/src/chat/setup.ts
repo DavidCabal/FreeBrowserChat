@@ -4,17 +4,22 @@ export const initializeChat = (io): void => {
   io.on('connection', socket => {
     // do something fun when a user connects
 
-    socket.on('disconnect', () => {
-      // do something really sad when a user disconnects
+    socket.on('disconnect', (client) => {
+      currentUsers = currentUsers.filter(user => user.id !== socket.id);
+      io.emit('userDisconnected', socket.id);
+    });
+
+    socket.on('initialConnection', () => {
+      io.to(`${socket.id}`).emit('currentUsers', currentUsers);
     });
 
     socket.on('userConnected', user => {
+      currentUsers.push(user);
       io.emit('userConnected', user);
     });
 
     socket.on('message', msg => {
-      // when a message comes in on the "message" channel, emit it out to everyone that is connected
-      socket.broadcast.emit('message', msg);
+      io.emit('message', msg);
     });
 
     socket.on('sendGif', async () => {
@@ -23,6 +28,8 @@ export const initializeChat = (io): void => {
     });
   });
 };
+
+let currentUsers = [];
 
 const getRandomGif = async () => {
   const response = await nodeFetch('https://api.giphy.com/v1/gifs/random?api_key=iy4oHQZmxRq8KH1x6S2yeeWIyh54ahGY&tag=fail&rating=G');
