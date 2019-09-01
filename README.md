@@ -1,5 +1,5 @@
-# Free Browser Chat
-The project name is a little confusing. What this actually contains is a free chat app that works in the browser.
+# Yak
+Free browser based real time chat
 
 # Quick Start Instructions
 * clone repo
