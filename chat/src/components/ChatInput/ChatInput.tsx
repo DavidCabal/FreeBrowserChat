@@ -19,14 +19,15 @@ const Container = styled.div`
 const MessageInput = styled(InputText)`
   position: absolute;
   height: 5vh;
-  width: 85vw;
+  width: 85%;
   overflow: scroll;
 `;
 
 const ButtonStyled = styled(Button)`
   position: absolute;
+  overflow: hidden;
   right: 0;
-  width: 15vw;
+  width: 15%;
   height: 5vh;
   @media (max-width: 720px) {
     width: 20vw;
@@ -43,14 +44,15 @@ export default class Join extends Component<props, state> {
   }
 
   sendMessage = () => {
-    this.props.submitMessage(this.state.text);
-    this.setState({ text: '' });
+    if (this.state.text.length > 0) {
+      this.props.submitMessage({ text: this.state.text });
+      this.setState({ text: '' });
+    }
   };
 
   handleKeyPress = e => {
     if (e.key === 'Enter') {
-      this.props.submitMessage(this.state.text);
-      this.setState({ text: '' });
+      this.sendMessage();
     }
   };
 

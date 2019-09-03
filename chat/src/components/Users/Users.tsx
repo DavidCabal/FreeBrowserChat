@@ -20,10 +20,10 @@ const Parent = styled.div`
   position: absolute;
   top: 0;
   right: 0;
-  border: 1px solid grey;
+  border-bottom: 1px solid grey;
   padding: 5px;
   height: 50vh;
-  width: 15vw;
+  width: 15%;
   @media (max-width: 720px) {
     display:none;
   }
@@ -39,6 +39,7 @@ const List = styled.ul`
 const ListElement = styled.li`
   padding: 5px 10px 5px 10px;
   overflow-wrap: break-word;
+  text-align: center;
 `;
 
 const CreateUsers = (users: User[]) => {

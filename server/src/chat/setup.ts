@@ -24,7 +24,7 @@ export const initializeChat = (io): void => {
 
     socket.on('sendGif', async () => {
       const gifUrl = await getRandomGif();
-      io.emit('gif', gifUrl);
+      io.emit('gif', JSON.stringify(gifUrl));
     });
   });
 };
@@ -34,5 +34,9 @@ let currentUsers = [];
 const getRandomGif = async () => {
   const response = await nodeFetch('https://api.giphy.com/v1/gifs/random?api_key=iy4oHQZmxRq8KH1x6S2yeeWIyh54ahGY&tag=fail&rating=G');
   const gifObject = await response.json();
-  return gifObject.data.id;
+  return {
+    url: gifObject.data.images.downsized_medium.url,
+    height: gifObject.data.images.downsized_medium.height,
+    width: gifObject.data.images.downsized_medium.width
+  };
 };

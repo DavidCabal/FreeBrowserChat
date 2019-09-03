@@ -8,6 +8,7 @@ import Join from './components/Join/Join';
 import Messages from './components/Messages/Messages';
 import Users from './components/Users/Users';
 import ChatInput from './components/ChatInput/ChatInput';
+import ActionCenter from './components/ActionCenter/ActionCenter';
 import './animate.css';
 
 interface props { }
@@ -19,7 +20,11 @@ interface User {
 
 interface Message {
   name: string;
-  text: string;
+  text?: string;
+  type: string;
+  url?: string;
+  height?: string;
+  width?: string;
 }
 
 interface state {
@@ -72,7 +77,13 @@ export default class App extends React.Component<props, state> {
     socket.on('currentUsers', users => this.setState({ users }));
     socket.on('message', msg => {
       const currentMessages = this.state.messages;
-      currentMessages.push({ name: msg.name, text: msg.text });
+      currentMessages.push({ name: msg.name, text: msg.text, type: 'message' });
+      this.setState({ messages: currentMessages });
+    });
+    socket.on('gif', msgString => {
+      const currentMessages = this.state.messages;
+      const msg = JSON.parse(msgString);
+      currentMessages.push({ name: this.state.name, url: msg.url, height: msg.height, width: msg.width, type: 'gif' });
       this.setState({ messages: currentMessages });
     });
   };
@@ -84,8 +95,12 @@ export default class App extends React.Component<props, state> {
   };
 
   submitMessage = msg => {
-    socket.emit('message', { name: this.state.name, text: msg });
+    socket.emit('message', { name: this.state.name, text: msg.text });
   };
+
+  loadRandomGif = () => {
+    socket.emit('sendGif', '');
+  }
 
   render() {
     return (
@@ -99,6 +114,7 @@ export default class App extends React.Component<props, state> {
           <div className={"animated fadeIn"}>
             <Messages messages={this.state.messages} />
             <Users users={this.state.users} getUsers={this.state.users} />
+            <ActionCenter loadRandomGif={this.loadRandomGif} />
             <ChatInput submitMessage={this.submitMessage} />
           </div>
         }

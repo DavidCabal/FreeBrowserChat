@@ -45,7 +45,7 @@ export default class Join extends Component<props, state> {
     return (
       <div>
         <Container>
-          <TitleText className={"animated fadeInDown"}>Welcome to Real Time Chat</TitleText>
+          <TitleText className={"animated fadeInDown"}>Welcome to Yak</TitleText>
         </Container>
         <Container>
           <span className="p-float-label">
