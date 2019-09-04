@@ -1,4 +1,5 @@
 const nodeFetch = require('node-fetch');
+import { Gif } from './interfaces/Gif';
 
 export const initializeChat = (io): void => {
   io.on('connection', socket => {
@@ -31,7 +32,7 @@ export const initializeChat = (io): void => {
 
 let currentUsers = [];
 
-const getRandomGif = async () => {
+export const getRandomGif = async (): Promise<Gif> => {
   const response = await nodeFetch('https://api.giphy.com/v1/gifs/random?api_key=iy4oHQZmxRq8KH1x6S2yeeWIyh54ahGY&tag=fail&rating=G');
   const gifObject = await response.json();
   return {
